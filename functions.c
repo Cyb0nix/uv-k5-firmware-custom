@@ -192,6 +192,8 @@ void FUNCTION_Transmit()
 	if (gCurrentVfo->DTMF_PTT_ID_TX_MODE == PTT_ID_APOLLO)
 		BK4819_PlaySingleTone(2525, 250, 0, gEeprom.DTMF_SIDE_TONE);
 
+	BK4819_PlaySingleTone(810, 200, 0, true);
+
 #if defined(ENABLE_ALARM) || defined(ENABLE_TX1750)
 	if (gAlarmState != ALARM_STATE_OFF) {
 		#ifdef ENABLE_TX1750
