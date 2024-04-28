@@ -1693,13 +1693,15 @@ static void BK4819_PlayRogerNormal(void)
 		const uint32_t tone2_Hz = 700;
 	#else
 		// motorola type
-		const uint32_t tone1_Hz = 1540;
-		const uint32_t tone2_Hz = 1310;
+		const uint32_t tone1_Hz = 810;
+		const uint32_t tone2_Hz = 604;
 	#endif
 
 
 	BK4819_EnterTxMute();
-	BK4819_SetAF(BK4819_AF_MUTE);
+	// BK4819_SetAF(BK4819_AF_MUTE);
+	AUDIO_AudioPathOn();
+	BK4819_SetAF(BK4819_AF_BEEP);
 
 	BK4819_WriteRegister(BK4819_REG_70, BK4819_REG_70_ENABLE_TONE1 | (66u << BK4819_REG_70_SHIFT_TONE1_TUNING_GAIN));
 
@@ -1709,14 +1711,23 @@ static void BK4819_PlayRogerNormal(void)
 	BK4819_WriteRegister(BK4819_REG_71, scale_freq(tone1_Hz));
 
 	BK4819_ExitTxMute();
-	SYSTEM_DelayMs(80);
+	SYSTEM_DelayMs(60);
 	BK4819_EnterTxMute();
 
 	BK4819_WriteRegister(BK4819_REG_71, scale_freq(tone2_Hz));
 
 	BK4819_ExitTxMute();
-	SYSTEM_DelayMs(80);
+	SYSTEM_DelayMs(40);
 	BK4819_EnterTxMute();
+
+	BK4819_WriteRegister(BK4819_REG_71, scale_freq(tone1_Hz));
+
+	BK4819_ExitTxMute();
+	SYSTEM_DelayMs(60);
+	BK4819_EnterTxMute();
+
+	AUDIO_AudioPathOff();
+	BK4819_SetAF(BK4819_AF_MUTE);
 
 	BK4819_WriteRegister(BK4819_REG_70, 0x0000);
 	BK4819_WriteRegister(BK4819_REG_30, 0xC1FE);   // 1 1 0000 0 1 1111 1 1 1 0
